@@ -37,13 +37,21 @@ tasks:
     cmds:
       - echo "Migrating down drizzle schema"
       - pnpm exec tsx {{.DB_SEED_PATH}}/resetdb.ts
-    silent: true
+    silent: false
 
   db_seed:
     cmds:
       - echo "Executing database seeders\n------------------\n"
       - pnpm exec tsx {{.DB_SEED_PATH}}/index.ts
-    silent: true
+    silent: false
+
+  db_fresh_seed:
+    cmds:
+      - echo "Migrate Fresh and Seed Database"
+      - task db_migrate_down
+      - task db_migrate_up
+      - task db_seed
+    silent: false
 
   dev:
     cmds:
