@@ -5,6 +5,7 @@ version: '3'
 vars:
   GREETING: Taskfile for Expense Tracker API
   DRIZZLE_CONFIG_PATH: ./src/config
+  DB_SEED_PATH: ./src/db/seeders
 
 tasks:
   default:
@@ -24,10 +25,24 @@ tasks:
       - pnpm exec drizzle-kit generate --config={{.DRIZZLE_CONFIG_PATH}}/drizzle.config.local.ts
     silent: true
 
-  drizzle_migrate:
+  db_migrate_up:
+    deps:
+      - drizzle_generate
     cmds:
       - echo "Migrating drizzle schema"
       - pnpm exec drizzle-kit migrate --config={{.DRIZZLE_CONFIG_PATH}}/drizzle.config.local.ts
+    silent: false
+
+  db_migrate_down:
+    cmds:
+      - echo "Migrating down drizzle schema"
+      - pnpm exec tsx {{.DB_SEED_PATH}}/resetdb.ts
+    silent: true
+
+  db_seed:
+    cmds:
+      - echo "Executing database seeders\n------------------\n"
+      - pnpm exec tsx {{.DB_SEED_PATH}}/index.ts
     silent: true
 
   dev:
