@@ -1,6 +1,6 @@
 import { db } from '../../lib/drizzle';
 
-async function resetDb() {
+async function resetDB() {
   await db.execute(`
     DO $$ DECLARE
       r RECORD;
@@ -14,4 +14,4 @@ async function resetDb() {
   console.log('✅ Database reset complete');
 }
 
-resetDb().then(() => process.exit(0));
+resetDB().then(() => process.exit(0));
