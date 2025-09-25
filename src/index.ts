@@ -1,16 +1,21 @@
-import express from "express";
-import coursesRouter from "./routes/courses";
-import usersRouter from "./routes/users";
+import express from 'express';
+import coursesRouter from './routes/courses';
+import usersRouter from './routes/users';
+import { loggerMiddleware } from './middlewares/logger';
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+// setup global middlewares
+app.use(loggerMiddleware);
+
+// setup routes
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
-app.use("/courses", coursesRouter);
-app.use("/users", usersRouter);
+app.use('/courses', coursesRouter);
+app.use('/users', usersRouter);
 
 app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+  console.log('Server is running on port 3000');
 });

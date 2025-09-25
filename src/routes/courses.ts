@@ -1,16 +1,19 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response } from 'express';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
+router.use(authMiddleware);
+
+router.get('/', (req: Request, res: Response) => {
   res
     .json({
-      message: "Courses",
+      message: 'Courses',
     })
     .status(200);
 });
 
-router.get("/:slug", (req: Request, res: Response) => {
+router.get('/:slug', (req: Request, res: Response) => {
   res
     .json({
       message: `Course by slug ${req.params.slug}`,
