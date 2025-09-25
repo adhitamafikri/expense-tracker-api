@@ -1,13 +1,35 @@
 import { NextFunction, Request, Response } from 'express';
+import { verifyToken } from '../lib/jwt';
 
 export const authMiddleware = function (
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  const token = req.headers.authorization;
-  if (!token) {
+  try {
+    const bearerToken = req.headers.authorization;
+    const refreshToken = req.headers['x-refresh-token'];
+
+    if (!bearerToken) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const actualAccessToken = bearerToken.split('Bearer ')[1];
+    const isValidAccessToken = verifyToken(actualAccessToken, 'access');
+    const isValidRefreshToken = verifyToken(refreshToken as string, 'refresh');
+
+    if (!isValidAccessToken) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    if (!isValidRefreshToken) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    next();
+  } catch (error: Error | unknown) {
+    if ((error as Error).name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' });
+    }
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  next();
 };

@@ -8,7 +8,7 @@ router.use(authMiddleware);
 router.get('/', (req: Request, res: Response) => {
   res
     .json({
-      message: 'Courses',
+      message: 'categories',
     })
     .status(200);
 });
@@ -16,7 +16,7 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/:slug', (req: Request, res: Response) => {
   res
     .json({
-      message: `Course by slug ${req.params.slug}`,
+      message: `Category by slug ${req.params.slug}`,
     })
     .status(200);
 });

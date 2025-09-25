@@ -1,6 +1,6 @@
 import express from 'express';
 import authRouter from './routes/auth';
-import coursesRouter from './routes/courses';
+import coursesRouter from './routes/categories';
 import usersRouter from './routes/users';
 import { loggerMiddleware } from './middlewares/logger';
 import 'dotenv/config';
@@ -24,8 +24,8 @@ app.use('/v1/auth', authRouter);
 // app.use('/v1/admin', );
 
 // User routes
-app.use('/v1/courses', coursesRouter);
-app.use('/users', usersRouter);
+app.use('/v1/categories', coursesRouter);
+app.use('/v1/users', usersRouter);
 
 // not found route
 app.use((req, res) => {

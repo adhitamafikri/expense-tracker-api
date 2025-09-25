@@ -13,7 +13,7 @@ export class AuthController {
       const data = await this.authService.login(
         req.body.phone,
         req.body.password,
-        req.headers.host || 'localhost',
+        req.headers.host?.split(':')[0] || '',
       );
 
       return res.status(200).json({ message: 'Login successful', data });
