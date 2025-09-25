@@ -1,0 +1,61 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Taskfile for Expense Tracker API
+  DRIZZLE_CONFIG_PATH: ./src/config
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  drizzle_push:
+    cmds:
+      - echo "Pushing drizzle schema"
+      - pnpm exec drizzle-kit push --config={{.DRIZZLE_CONFIG_PATH}}/drizzle.config.local.ts
+    silent: true
+
+  drizzle_generate:
+    cmds:
+      - echo "Generating drizzle schema"
+      - pnpm exec drizzle-kit generate --config={{.DRIZZLE_CONFIG_PATH}}/drizzle.config.local.ts
+    silent: true
+
+  drizzle_migrate:
+    cmds:
+      - echo "Migrating drizzle schema"
+      - pnpm exec drizzle-kit migrate --config={{.DRIZZLE_CONFIG_PATH}}/drizzle.config.local.ts
+    silent: true
+
+  dev:
+    cmds:
+      - echo "Starting development server"
+      - pnpm dev
+    silent: true
+
+  postgres_up:
+    cmds:
+      - echo "Starting postgres"
+      - docker compose up postgres -d
+    silent: true
+
+  postgres_down:
+    cmds:
+      - echo "Stopping postgres"
+      - docker compose down postgres
+    silent: true
+
+  redis_up:
+    cmds:
+      - echo "Starting redis"
+      - docker compose up redis -d
+    silent: true
+
+  redis_down:
+    cmds:
+      - echo "Stopping redis"
+      - docker compose down redis
+    silent: true

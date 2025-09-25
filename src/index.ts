@@ -13,9 +13,7 @@ app.use(loggerMiddleware);
 
 // setup routes
 app.get('/', (req, res) => {
-  res
-    .json({ message: 'Welcome to KJO Academy Backend Express API' })
-    .status(200);
+  res.json({ message: 'Welcome to Expense Tracker API' }).status(200);
 });
 
 app.use('/courses', coursesRouter);
