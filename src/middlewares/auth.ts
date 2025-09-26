@@ -10,13 +10,16 @@ export const authMiddleware = function (
     const bearerToken = req.headers.authorization;
     const refreshToken = req.headers['x-refresh-token'];
 
-    if (!bearerToken) {
+    if (!bearerToken || !refreshToken) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const actualAccessToken = bearerToken.split('Bearer ')[1];
-    const isValidAccessToken = verifyToken(actualAccessToken, 'access');
-    const isValidRefreshToken = verifyToken(refreshToken as string, 'refresh');
+    const isValidAccessToken = verifyToken(actualAccessToken, 'access_token');
+    const isValidRefreshToken = verifyToken(
+      refreshToken as string,
+      'refresh_token',
+    );
 
     if (!isValidAccessToken) {
       return res.status(401).json({ message: 'Unauthorized' });

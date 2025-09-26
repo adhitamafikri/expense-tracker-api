@@ -15,7 +15,7 @@ export class AuthRepository {
       .from(users)
       .where(eq(users.phone, phone))
       .limit(1);
-    console.log('the user from the repository', result[0]);
+
     return result[0];
   }
 
