@@ -2,6 +2,8 @@
 
 version: '3'
 
+dotenv: ['.env']
+
 vars:
   GREETING: Taskfile for Expense Tracker API
   DRIZZLE_CONFIG_PATH: ./src/config
@@ -81,4 +83,22 @@ tasks:
     cmds:
       - echo "Stopping redis"
       - docker compose down redis
+    silent: true
+
+  redis_cli:
+    cmds:
+      - echo "Connecting to redis"
+      - docker compose exec redis redis-cli -a ${REDIS_PASSWORD}
+    silent: true
+
+  compose_up:
+    cmds:
+      - echo "Starting compose"
+      - docker compose up -d
+    silent: true
+
+  compose_down:
+    cmds:
+      - echo "Stopping compose"
+      - docker compose down
     silent: true

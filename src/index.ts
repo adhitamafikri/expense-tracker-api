@@ -1,7 +1,9 @@
 import express from 'express';
+import { quitRedisClient } from './lib/redis';
 import authRouter from './routes/auth';
-import coursesRouter from './routes/categories';
 import usersRouter from './routes/users';
+import coursesRouter from './routes/categories';
+import incomesRouter from './routes/incomes';
 import { loggerMiddleware } from './middlewares/logger';
 import 'dotenv/config';
 
@@ -24,8 +26,9 @@ app.use('/v1/auth', authRouter);
 // app.use('/v1/admin', );
 
 // User routes
-app.use('/v1/categories', coursesRouter);
 app.use('/v1/users', usersRouter);
+app.use('/v1/categories', coursesRouter);
+app.use('/v1/incomes', incomesRouter);
 
 // not found route
 app.use((req, res) => {
@@ -34,7 +37,7 @@ app.use((req, res) => {
   });
 });
 
-app.listen(
+const server = app.listen(
   parseInt(process.env.APP_PORT || '3500'),
   process.env.APP_HOST || '0.0.0.0',
   () => {
@@ -43,3 +46,20 @@ app.listen(
     );
   },
 );
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(async () => {
+    await quitRedisClient();
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received, shutting down gracefully');
+  server.close(async () => {
+    await quitRedisClient();
+    process.exit(0);
+  });
+});
